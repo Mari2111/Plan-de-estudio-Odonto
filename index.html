@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Malla Curricular Odontología UAM</title>
   <style>
     body {
@@ -10,7 +10,6 @@
       background-color: #efcfe3;
       margin: 0;
       padding: 20px;
-      color: #333;
     }
     h1 {
       text-align: center;
@@ -18,38 +17,37 @@
     }
     .grid {
       display: flex;
-      gap: 10px;
       overflow-x: auto;
+      gap: 16px;
     }
     .semestre {
-      flex: 0 0 auto;
-      background-color: #b3dee2;
-      border-radius: 10px;
+      background-color: #eaf2d7;
       padding: 10px;
+      border-radius: 10px;
       min-width: 220px;
     }
     .semestre h2 {
       text-align: center;
-      background-color: #eaf2d7;
+      margin-bottom: 10px;
+      background-color: #b3dee2;
       padding: 5px;
-      border-radius: 5px;
-      color: #333;
+      border-radius: 6px;
     }
     .materia {
       background-color: #ea9ab2;
-      margin: 5px 0;
+      margin: 6px 0;
       padding: 8px;
       border-radius: 6px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
       position: relative;
     }
     .materia.aprobada {
       background-color: #e27396;
       text-decoration: line-through;
+      color: white;
     }
     .materia.bloqueada {
-      background-color: #ddd;
+      background-color: #ccc;
       cursor: not-allowed;
     }
     .materia.bloqueada:hover::after {
@@ -57,8 +55,8 @@
       position: absolute;
       top: 100%;
       left: 0;
-      background-color: #333;
-      color: #fff;
+      background: #333;
+      color: white;
       padding: 4px;
       border-radius: 5px;
       font-size: 12px;
@@ -69,11 +67,12 @@
 <body>
   <h1>Malla Curricular Odontología - UAM</h1>
   <div class="grid" id="malla"></div>
+
   <script>
     const materias = {
       "I": [
         { id: 1, nombre: "Anatomía Funcional", prereq: [] },
-        { id: 2, nombre: "Biología Celular I", prereq: [] },
+        { id: 2, nombre: "Biología Celular y Molecular I", prereq: [] },
         { id: 3, nombre: "Biofísica y Biomateriales", prereq: [] },
         { id: 4, nombre: "Histo-Embriología Oral", prereq: [] },
         { id: 5, nombre: "Cultura Política", prereq: [] },
@@ -81,10 +80,10 @@
         { id: 7, nombre: "Inglés I", prereq: [] }
       ],
       "II": [
-        { id: 8, nombre: "Neuroanatomía y Neurofisiología", prereq: [1] },
-        { id: 9, nombre: "Biología Celular II", prereq: [2] },
-        { id: 10, nombre: "Crecimiento y Oclusión I", prereq: [3] },
-        { id: 11, nombre: "Imagenología y Dx", prereq: [4] },
+        { id: 8, nombre: "Neuroanatomía Funcional y Neurofisiología", prereq: [1] },
+        { id: 9, nombre: "Biología Celular y Molecular II", prereq: [2] },
+        { id: 10, nombre: "Crecimiento, Desarrollo y Oclusión I", prereq: [3] },
+        { id: 11, nombre: "Imagenología y Medios Dx", prereq: [4] },
         { id: 12, nombre: "Competencias Comunicativas", prereq: [] },
         { id: 13, nombre: "Promoción de la Salud", prereq: [6] },
         { id: 14, nombre: "Inglés II", prereq: [7] }
@@ -92,7 +91,7 @@
       "III": [
         { id: 15, nombre: "Fisiología", prereq: [1, 3] },
         { id: 16, nombre: "Patología General", prereq: [2, 9] },
-        { id: 17, nombre: "Crecimiento y Oclusión II", prereq: [10] },
+        { id: 17, nombre: "Crecimiento, Desarrollo y Oclusión II", prereq: [10] },
         { id: 18, nombre: "Periodoncia I", prereq: [4] },
         { id: 19, nombre: "Cariología I", prereq: [] },
         { id: 20, nombre: "Inglés III", prereq: [14] }
@@ -122,20 +121,20 @@
       "VII": [
         { id: 37, nombre: "Práctica Integral Adultos II", prereq: [32] },
         { id: 38, nombre: "Endodoncia II", prereq: [33] },
-        { id: 39, nombre: "Intervenciones Salud Pública I", prereq: [35] },
+        { id: 39, nombre: "Intervenciones en Salud Pública I", prereq: [35] },
         { id: 40, nombre: "Procesos de Investigación II", prereq: [34] }
       ],
       "VIII": [
         { id: 41, nombre: "Práctica Integral Adultos III", prereq: [37] },
         { id: 42, nombre: "Odontología Forense", prereq: [40] },
-        { id: 43, nombre: "Intervenciones Salud Pública II", prereq: [39] },
+        { id: 43, nombre: "Intervenciones en Salud Pública II", prereq: [39] },
         { id: 44, nombre: "Administración en Salud", prereq: [] }
       ],
       "IX": [
         { id: 45, nombre: "Práctica Estomatología y Cirugía Oral I", prereq: [41] },
         { id: 46, nombre: "Práctica Integral Adultos IV", prereq: [41] },
         { id: 47, nombre: "Práctica Integral Niños I", prereq: [29] },
-        { id: 48, nombre: "Intervenciones Salud Pública III", prereq: [43] },
+        { id: 48, nombre: "Intervenciones en Salud Pública III", prereq: [43] },
         { id: 49, nombre: "Libre 1", prereq: [] }
       ],
       "X": [
@@ -149,66 +148,61 @@
       ]
     };
 
-    const colores = ["#e27396", "#ea9ab2", "#efcfe3", "#eaf2d7", "#b3dee2"];
-
-    const aprobadas = JSON.parse(localStorage.getItem('materiasAprobadas')) || [];
+    const aprobadas = JSON.parse(localStorage.getItem('materiasAprobadas') || '[]');
 
     function guardarProgreso() {
       localStorage.setItem('materiasAprobadas', JSON.stringify(aprobadas));
     }
 
     function crearMalla() {
-      const malla = document.getElementById('malla');
-      let colorIndex = 0;
+      const contenedor = document.getElementById('malla');
+      contenedor.innerHTML = '';
 
-      for (const [semestre, lista] of Object.entries(materias)) {
-        const col = document.createElement('div');
-        col.className = 'semestre';
-        col.style.backgroundColor = colores[colorIndex % colores.length];
-        const title = document.createElement('h2');
-        title.textContent = `Semestre ${semestre}`;
-        col.appendChild(title);
+      Object.entries(materias).forEach(([sem, lista]) => {
+        const columna = document.createElement('div');
+        columna.className = 'semestre';
+        const titulo = document.createElement('h2');
+        titulo.textContent = `Semestre ${sem}`;
+        columna.appendChild(titulo);
 
-        lista.forEach(materia => {
+        lista.forEach(m => {
           const div = document.createElement('div');
           div.className = 'materia';
-          div.textContent = materia.nombre;
+          div.textContent = m.nombre;
 
-          const bloqueada = materia.prereq.some(pr => !aprobadas.includes(pr));
-          if (aprobadas.includes(materia.id)) {
-            div.classList.add('aprobada');
-          } else if (bloqueada) {
+          const bloqueada = m.prereq.some(pr => !aprobadas.includes(pr));
+          if (bloqueada) {
             div.classList.add('bloqueada');
-            const faltan = materia.prereq.map(id => {
-              for (const sem of Object.values(materias)) {
-                const mat = sem.find(m => m.id === id);
-                if (mat) return mat.nombre;
-              }
-              return `ID ${id}`;
-            }).join(', ');
-            div.setAttribute('data-tooltip', `Falta aprobar: ${faltan}`);
+            const nombresFaltantes = m.prereq
+              .filter(id => !aprobadas.includes(id))
+              .map(id => {
+                for (const s of Object.values(materias)) {
+                  const mat = s.find(mt => mt.id === id);
+                  if (mat) return mat.nombre;
+                }
+                return `ID ${id}`;
+              });
+            div.setAttribute('data-tooltip', `Faltan: ${nombresFaltantes.join(', ')}`);
+          } else if (aprobadas.includes(m.id)) {
+            div.classList.add('aprobada');
           }
 
           div.addEventListener('click', () => {
             if (div.classList.contains('bloqueada')) return;
-            if (div.classList.contains('aprobada')) {
-              div.classList.remove('aprobada');
-              aprobadas.splice(aprobadas.indexOf(materia.id), 1);
+            if (aprobadas.includes(m.id)) {
+              aprobadas.splice(aprobadas.indexOf(m.id), 1);
             } else {
-              div.classList.add('aprobada');
-              aprobadas.push(materia.id);
+              aprobadas.push(m.id);
             }
             guardarProgreso();
-            malla.innerHTML = '';
             crearMalla();
           });
 
-          col.appendChild(div);
+          columna.appendChild(div);
         });
 
-        colorIndex++;
-        malla.appendChild(col);
-      }
+        contenedor.appendChild(columna);
+      });
     }
 
     crearMalla();
