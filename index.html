@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Malla Curricular Odontología UAM</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #efcfe3;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      color: #e27396;
+    }
+    .grid {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+    }
+    .semestre {
+      flex: 0 0 auto;
+      background-color: #b3dee2;
+      border-radius: 10px;
+      padding: 10px;
+      min-width: 200px;
+    }
+    .semestre h2 {
+      text-align: center;
+      background-color: #eaf2d7;
+      padding: 5px;
+      border-radius: 5px;
+      color: #333;
+    }
+    .materia {
+      background-color: #ea9ab2;
+      margin: 5px 0;
+      padding: 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      position: relative;
+    }
+    .materia.aprobada {
+      background-color: #e27396;
+      text-decoration: line-through;
+    }
+    .materia.bloqueada {
+      background-color: #ddd;
+      cursor: not-allowed;
+    }
+    .materia.bloqueada:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #333;
+      color: #fff;
+      padding: 4px;
+      border-radius: 5px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>Malla Curricular Odontología - UAM</h1>
+  <div class="grid" id="malla"></div>
+  <script>
+    const materias = {
+      "I": [
+        { id: 1, nombre: "Anatomía Funcional", prereq: [] },
+        { id: 2, nombre: "Biología Celular I", prereq: [] },
+        { id: 3, nombre: "Biofísica y Biomateriales", prereq: [] },
+        { id: 4, nombre: "Histo-Embriología Oral", prereq: [] },
+        { id: 5, nombre: "Cultura Política", prereq: [] },
+        { id: 6, nombre: "Salud y Contexto", prereq: [] },
+        { id: 7, nombre: "Inglés I", prereq: [] }
+      ],
+      "II": [
+        { id: 8, nombre: "Neuroanatomía y Neurofisiología", prereq: [1] },
+        { id: 9, nombre: "Biología Celular II", prereq: [2] },
+        { id: 10, nombre: "Crecimiento y Oclusión I", prereq: [3] },
+        { id: 11, nombre: "Imagenología y Dx", prereq: [4] },
+        { id: 12, nombre: "Competencias Comunicativas", prereq: [] },
+        { id: 13, nombre: "Promoción de la Salud", prereq: [6] },
+        { id: 14, nombre: "Inglés II", prereq: [7] }
+      ]
+      // Continúa agregando hasta el X semestre...
+    };
+
+    const aprobadas = JSON.parse(localStorage.getItem('materiasAprobadas')) || [];
+
+    function guardarProgreso() {
+      localStorage.setItem('materiasAprobadas', JSON.stringify(aprobadas));
+    }
+
+    function crearMalla() {
+      const malla = document.getElementById('malla');
+      for (const [semestre, lista] of Object.entries(materias)) {
+        const col = document.createElement('div');
+        col.className = 'semestre';
+        const title = document.createElement('h2');
+        title.textContent = `Semestre ${semestre}`;
+        col.appendChild(title);
+
+        lista.forEach(materia => {
+          const div = document.createElement('div');
+          div.className = 'materia';
+          div.textContent = materia.nombre;
+
+          const bloqueada = materia.prereq.some(pr => !aprobadas.includes(pr));
+          if (aprobadas.includes(materia.id)) {
+            div.classList.add('aprobada');
+          } else if (bloqueada) {
+            div.classList.add('bloqueada');
+            const faltan = materia.prereq.filter(pr => !aprobadas.includes(pr)).join(', ');
+            div.setAttribute('data-tooltip', `Falta aprobar: ${faltan}`);
+          }
+
+          div.addEventListener('click', () => {
+            if (div.classList.contains('bloqueada')) return;
+            if (div.classList.contains('aprobada')) {
+              div.classList.remove('aprobada');
+              aprobadas.splice(aprobadas.indexOf(materia.id), 1);
+            } else {
+              div.classList.add('aprobada');
+              aprobadas.push(materia.id);
+            }
+            guardarProgreso();
+            malla.innerHTML = '';
+            crearMalla();
+          });
+
+          col.appendChild(div);
+        });
+
+        malla.appendChild(col);
+      }
+    }
+
+    crearMalla();
+  </script>
+</body>
+</html>
