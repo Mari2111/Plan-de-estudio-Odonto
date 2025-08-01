@@ -26,7 +26,7 @@
       background-color: #b3dee2;
       border-radius: 10px;
       padding: 10px;
-      min-width: 200px;
+      min-width: 220px;
     }
     .semestre h2 {
       text-align: center;
@@ -88,9 +88,68 @@
         { id: 12, nombre: "Competencias Comunicativas", prereq: [] },
         { id: 13, nombre: "Promoción de la Salud", prereq: [6] },
         { id: 14, nombre: "Inglés II", prereq: [7] }
+      ],
+      "III": [
+        { id: 15, nombre: "Fisiología", prereq: [1, 3] },
+        { id: 16, nombre: "Patología General", prereq: [2, 9] },
+        { id: 17, nombre: "Crecimiento y Oclusión II", prereq: [10] },
+        { id: 18, nombre: "Periodoncia I", prereq: [4] },
+        { id: 19, nombre: "Cariología I", prereq: [] },
+        { id: 20, nombre: "Inglés III", prereq: [14] }
+      ],
+      "IV": [
+        { id: 21, nombre: "Patología Oral", prereq: [16] },
+        { id: 22, nombre: "Farmacología", prereq: [15] },
+        { id: 23, nombre: "Técnicas Restaurativas I", prereq: [19] },
+        { id: 24, nombre: "Cariología II", prereq: [19] },
+        { id: 25, nombre: "Ética", prereq: [] },
+        { id: 26, nombre: "Inglés IV", prereq: [20] }
+      ],
+      "V": [
+        { id: 27, nombre: "Clínica Básica", prereq: [21, 22, 23] },
+        { id: 28, nombre: "Técnicas Restaurativas II", prereq: [23] },
+        { id: 29, nombre: "Odontología Pediátrica", prereq: [24] },
+        { id: 30, nombre: "Filosofía de la Ciencia", prereq: [] },
+        { id: 31, nombre: "Inglés V", prereq: [26] }
+      ],
+      "VI": [
+        { id: 32, nombre: "Práctica Integral Adultos I", prereq: [27] },
+        { id: 33, nombre: "Endodoncia I", prereq: [28] },
+        { id: 34, nombre: "Procesos de Investigación I", prereq: [] },
+        { id: 35, nombre: "Salud Pública y Epidemiología", prereq: [13] },
+        { id: 36, nombre: "Inglés VI", prereq: [31] }
+      ],
+      "VII": [
+        { id: 37, nombre: "Práctica Integral Adultos II", prereq: [32] },
+        { id: 38, nombre: "Endodoncia II", prereq: [33] },
+        { id: 39, nombre: "Intervenciones Salud Pública I", prereq: [35] },
+        { id: 40, nombre: "Procesos de Investigación II", prereq: [34] }
+      ],
+      "VIII": [
+        { id: 41, nombre: "Práctica Integral Adultos III", prereq: [37] },
+        { id: 42, nombre: "Odontología Forense", prereq: [40] },
+        { id: 43, nombre: "Intervenciones Salud Pública II", prereq: [39] },
+        { id: 44, nombre: "Administración en Salud", prereq: [] }
+      ],
+      "IX": [
+        { id: 45, nombre: "Práctica Estomatología y Cirugía Oral I", prereq: [41] },
+        { id: 46, nombre: "Práctica Integral Adultos IV", prereq: [41] },
+        { id: 47, nombre: "Práctica Integral Niños I", prereq: [29] },
+        { id: 48, nombre: "Intervenciones Salud Pública III", prereq: [43] },
+        { id: 49, nombre: "Libre 1", prereq: [] }
+      ],
+      "X": [
+        { id: 50, nombre: "Rotación Hospitalaria", prereq: [45, 46] },
+        { id: 51, nombre: "Práctica Estomatología y Cirugía Oral II", prereq: [45] },
+        { id: 52, nombre: "Práctica Integral Niños II", prereq: [47] },
+        { id: 53, nombre: "Práctica Institucional Integrada", prereq: [50, 51, 52] },
+        { id: 54, nombre: "Desarrollo Sostenible", prereq: [] },
+        { id: 55, nombre: "Libre 2", prereq: [] },
+        { id: 56, nombre: "Libre 3", prereq: [] }
       ]
-      // Continúa agregando hasta el X semestre...
     };
+
+    const colores = ["#e27396", "#ea9ab2", "#efcfe3", "#eaf2d7", "#b3dee2"];
 
     const aprobadas = JSON.parse(localStorage.getItem('materiasAprobadas')) || [];
 
@@ -100,9 +159,12 @@
 
     function crearMalla() {
       const malla = document.getElementById('malla');
+      let colorIndex = 0;
+
       for (const [semestre, lista] of Object.entries(materias)) {
         const col = document.createElement('div');
         col.className = 'semestre';
+        col.style.backgroundColor = colores[colorIndex % colores.length];
         const title = document.createElement('h2');
         title.textContent = `Semestre ${semestre}`;
         col.appendChild(title);
@@ -117,7 +179,13 @@
             div.classList.add('aprobada');
           } else if (bloqueada) {
             div.classList.add('bloqueada');
-            const faltan = materia.prereq.filter(pr => !aprobadas.includes(pr)).join(', ');
+            const faltan = materia.prereq.map(id => {
+              for (const sem of Object.values(materias)) {
+                const mat = sem.find(m => m.id === id);
+                if (mat) return mat.nombre;
+              }
+              return `ID ${id}`;
+            }).join(', ');
             div.setAttribute('data-tooltip', `Falta aprobar: ${faltan}`);
           }
 
@@ -138,6 +206,7 @@
           col.appendChild(div);
         });
 
+        colorIndex++;
         malla.appendChild(col);
       }
     }
